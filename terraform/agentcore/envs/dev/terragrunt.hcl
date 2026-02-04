@@ -18,4 +18,5 @@ inputs = {
   agentcore_network_mode   = "PUBLIC"
   agentcore_use_vpc         = false
   secrets_manager_secret_name = "rubyrana-football-dev-agentcore-config"
+  image_tag                = "latest"
 }
