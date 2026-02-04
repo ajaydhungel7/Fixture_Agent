@@ -44,3 +44,9 @@ variable "agentcore_network_mode" {
   default     = "PUBLIC"
   description = "AgentCore network mode: PUBLIC or VPC"
 }
+
+variable "image_tag" {
+  type        = string
+  default     = "latest"
+  description = "Docker image tag for AgentCore runtime"
+}

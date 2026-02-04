@@ -40,6 +40,8 @@ jobs:
         run: |
           docker build --build-arg API_KEY="$API_KEY" --build-arg FOOTBALL_API_KEY="$FOOTBALL_API_KEY" -t "$ECR_REPO:$AGENTCORE_IMAGE_TAG" .
           docker push "$ECR_REPO:$AGENTCORE_IMAGE_TAG"
+          docker tag "$ECR_REPO:$AGENTCORE_IMAGE_TAG" "$ECR_REPO:latest"
+          docker push "$ECR_REPO:latest"
 
       - name: Update AgentCore runtime image
         run: |
