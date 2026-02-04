@@ -17,3 +17,15 @@ resource "aws_bedrockagentcore_agent_runtime" "agentcore_runtime" {
   }
 }
 
+output "ecr_repository_url" {
+  value = aws_ecr_repository.app.repository_url
+}
+
+output "agentcore_runtime_id" {
+  value = var.agentcore_runtime_name
+}
+
+output "agentcore_runtime_role_arn" {
+  value = aws_iam_role.agentcore_runtime.arn
+}
+

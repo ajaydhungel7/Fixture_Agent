@@ -19,6 +19,7 @@ jobs:
       API_KEY: ${{ secrets.API_KEY }}
       FOOTBALL_API_KEY: ${{ secrets.FOOTBALL_API_KEY }}
       AGENTCORE_RUNTIME_ID: ${{ secrets.AGENTCORE_RUNTIME_ID }}
+      ROLE_ARN: ${{ secrets.ROLE_ARN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -38,17 +39,17 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build --build-arg API_KEY="$API_KEY" --build-arg FOOTBALL_API_KEY="$FOOTBALL_API_KEY" -t "$ECR_REPO:$AGENTCORE_IMAGE_TAG" .
-          docker push "$ECR_REPO:$AGENTCORE_IMAGE_TAG"
-          docker tag "$ECR_REPO:$AGENTCORE_IMAGE_TAG" "$ECR_REPO:latest"
-          docker push "$ECR_REPO:latest"
+          docker buildx build --platform linux/arm64 -t "$ECR_REPO:$AGENTCORE_IMAGE_TAG" --build-arg API_KEY="$API_KEY" --build-arg FOOTBALL_API_KEY="$FOOTBALL_API_KEY" --push .
+          docker buildx build --platform linux/arm64 -t "$ECR_REPO:latest" --build-arg API_KEY="$API_KEY" --build-arg FOOTBALL_API_KEY="$FOOTBALL_API_KEY" --push .
 
       - name: Update AgentCore runtime image
         run: |
-          aws bedrock-agent-core update-agent-runtime \
+          aws bedrock-agentcore-control update-agent-runtime \
             --agent-runtime-id "$AGENTCORE_RUNTIME_ID" \
-            --image-uri "$ECR_REPO:$AGENTCORE_IMAGE_TAG" \
-            --region "us-east-1"
+            --agent-runtime-artifact '{"containerConfiguration":{"containerUri":"'$ECR_REPO:$AGENTCORE_IMAGE_TAG'"}}' \
+            --role-arn "$ROLE_ARN" \
+            --network-configuration '{"networkMode":"PUBLIC"}' \
+            --region us-east-1
 
       - name: Done
         run: echo "Agent deployed to AgentCore!"
