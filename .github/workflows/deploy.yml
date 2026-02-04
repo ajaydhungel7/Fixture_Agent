@@ -45,7 +45,7 @@ jobs:
 
       - name: Update AgentCore runtime image
         run: |
-          aws bedrock-agentcore update-agent-runtime \
+          aws bedrock-agent-core update-agent-runtime \
             --agent-runtime-id "$AGENTCORE_RUNTIME_ID" \
             --image-uri "$ECR_REPO:$AGENTCORE_IMAGE_TAG" \
             --region "us-east-1"
