@@ -24,4 +24,4 @@ ENV ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
 ENV PORT=8080
 EXPOSE 8080
 
-CMD ["ruby", "server.rb"]
+CMD ["ruby", "main.rb"]
